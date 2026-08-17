@@ -112,7 +112,7 @@ cd codigo-inicial
 dotnet run
 ```
 
-En la consola vas a ver el puerto (algo como `http://localhost:5xxx`).
+En la consola vas a ver el puerto (algo como `http://localhost:5000`).
 Cambia el puerto por el tuyo en los comandos.
 
 ### 4.1 Caso normal (un post de texto)
@@ -124,19 +124,19 @@ curl -X POST http://localhost:5xxx/posts \
   -d '{ "title": "mi primer post", "body": "hola", "kind": "text" }'
 
 # votar 3 veces
-curl -X POST http://localhost:5xxx/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
-curl -X POST http://localhost:5xxx/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
-curl -X POST http://localhost:5xxx/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/1/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
 
 # comentar
-curl -X POST http://localhost:5xxx/posts/1/comments \
+curl -X POST http://localhost:5000/posts/1/comments \
   -H "Content-Type: application/json" -d '{ "body": "buen post" }'
 
 # consultar
-curl http://localhost:5xxx/posts/1
+curl http://localhost:5000/posts/1
 
 # comparar el score guardado contra el calculador oficial
-curl http://localhost:5xxx/posts/1/score-debug
+curl http://localhost:5000/posts/1/score-debug
 ```
 
 Deberias ver `score: 33` por todos lados, y en `score-debug` los dos numeros
@@ -146,28 +146,28 @@ iguales. Hasta aqui todo bien.
 
 ```bash
 # crear un post de tipo imagen
-curl -X POST http://localhost:5xxx/posts \
+curl -X POST http://localhost:5000/posts \
   -H "Content-Type: application/json" \
   -d '{ "title": "foto del gato", "body": "", "kind": "image" }'
 
 # votarlo 4 veces
-curl -X POST http://localhost:5xxx/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
-curl -X POST http://localhost:5xxx/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
-curl -X POST http://localhost:5xxx/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
-curl -X POST http://localhost:5xxx/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
+curl -X POST http://localhost:5000/posts/2/vote -H "Content-Type: application/json" -d '{ "value": 1 }'
 
 # darle 6 premios
-curl -X POST http://localhost:5xxx/posts/2/awards
-curl -X POST http://localhost:5xxx/posts/2/awards
-curl -X POST http://localhost:5xxx/posts/2/awards
-curl -X POST http://localhost:5xxx/posts/2/awards
-curl -X POST http://localhost:5xxx/posts/2/awards
-curl -X POST http://localhost:5xxx/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
+curl -X POST http://localhost:5000/posts/2/awards
 
 # y ahora pregunta el score
-curl http://localhost:5xxx/posts/2
-curl http://localhost:5xxx/posts/2/score-debug
-curl http://localhost:5xxx/posts
+curl http://localhost:5000/posts/2
+curl http://localhost:5000/posts/2/score-debug
+curl http://localhost:5000/posts
 ```
 
 **El mismo post tiene dos scores distintos: 40 y 102.**
@@ -199,15 +199,15 @@ las pruebas y otra real en produccion".
 
 Llena la tabla del `RESPUESTAS.md`. Estas son las candidatas:
 
-| Abstraccion | Donde vive |
-|-------------|-----------|
-| `IRepository<T>` | Abstractions |
-| `IPostRepository` | Abstractions |
-| `IPostFactory` + `PostFactory` | Abstractions / Services |
-| `IUnitOfWork` + `NoOpUnitOfWork` | Abstractions / Infrastructure |
+| Abstraccion                               | Donde vive                    |
+| ----------------------------------------- | ----------------------------- |
+| `IRepository<T>`                          | Abstractions                  |
+| `IPostRepository`                         | Abstractions                  |
+| `IPostFactory` + `PostFactory`            | Abstractions / Services       |
+| `IUnitOfWork` + `NoOpUnitOfWork`          | Abstractions / Infrastructure |
 | `IEmailNotifier` + `ConsoleEmailNotifier` | Abstractions / Infrastructure |
-| `AbstractValidatorBase<T>` | Abstractions |
-| `PostServiceFactory` | Services |
+| `AbstractValidatorBase<T>`                | Abstractions                  |
+| `PostServiceFactory`                      | Services                      |
 
 **Aviso importante:** de esa lista, **una sola se queda**. Las demas se van.
 Averigua cual antes de seguir, porque es la pregunta que vale mas puntos de
@@ -234,14 +234,14 @@ YAGNI este mal; es que el calculo de costo da otro resultado.
 
 ### 6.2 Las que se van
 
-| Que borrar | Por que |
-|-----------|---------|
-| `IRepository<T>` (y sus miembros en el repositorio) | Hay una sola entidad. Y `Delete`, `Find` y `Count` no los llama nadie. Ademas viola ISP: obliga a implementar metodos que no se usan. |
-| `IPostFactory` + `PostFactory` | Construye un objeto con `new`. Eso ya lo hace `new`. |
-| `IUnitOfWork` + `NoOpUnitOfWork` | No hay base de datos ni transacciones. Hoy sus tres metodos estan vacios. |
-| `IEmailNotifier` + `ConsoleEmailNotifier` + `NotifyAuthor` | Ningun flujo manda correos. Es codigo muerto con inyeccion incluida. |
-| `PostServiceFactory` | Le pide al contenedor de DI lo que el contenedor ya inyecta solo. |
-| `AbstractValidatorBase<T>` | Dos herederos y dos hooks (`OnBeforeValidate`, `OnAfterValidate`) que nadie sobrescribe. Herencia por herencia. |
+| Que borrar                                                 | Por que                                                                                                                               |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `IRepository<T>` (y sus miembros en el repositorio)        | Hay una sola entidad. Y `Delete`, `Find` y `Count` no los llama nadie. Ademas viola ISP: obliga a implementar metodos que no se usan. |
+| `IPostFactory` + `PostFactory`                             | Construye un objeto con `new`. Eso ya lo hace `new`.                                                                                  |
+| `IUnitOfWork` + `NoOpUnitOfWork`                           | No hay base de datos ni transacciones. Hoy sus tres metodos estan vacios.                                                             |
+| `IEmailNotifier` + `ConsoleEmailNotifier` + `NotifyAuthor` | Ningun flujo manda correos. Es codigo muerto con inyeccion incluida.                                                                  |
+| `PostServiceFactory`                                       | Le pide al contenedor de DI lo que el contenedor ya inyecta solo.                                                                     |
+| `AbstractValidatorBase<T>`                                 | Dos herederos y dos hooks (`OnBeforeValidate`, `OnAfterValidate`) que nadie sobrescribe. Herencia por herencia.                       |
 
 Al quitar `AbstractValidatorBase<T>`, los dos validadores se vuelven clases
 normales que devuelven `Result<string>`. Mas cortas y sin ceremonia.
@@ -281,13 +281,13 @@ solo lugar**: `PostRankingCalculator`.
 
 Estos cinco lugares (en tres archivos) calculan el score hoy:
 
-| Lugar | Que le falta a su copia |
-|-------|-------------------------|
-| `PostRankingCalculator.Calculate` | nada, es la version completa |
-| `PostService.CreatePost` | tipo de post, premios, banderas, antiguedad |
-| `PostService.Vote` | tipo de post, premios, banderas |
-| `PostService.AddComment` | tipo de post, premios, banderas |
-| `Program.cs` en `GET /posts` | todo lo anterior y ademas la antiguedad |
+| Lugar                             | Que le falta a su copia                     |
+| --------------------------------- | ------------------------------------------- |
+| `PostRankingCalculator.Calculate` | nada, es la version completa                |
+| `PostService.CreatePost`          | tipo de post, premios, banderas, antiguedad |
+| `PostService.Vote`                | tipo de post, premios, banderas             |
+| `PostService.AddComment`          | tipo de post, premios, banderas             |
+| `Program.cs` en `GET /posts`      | todo lo anterior y ademas la antiguedad     |
 
 Y hay un quinto lugar que **deberia** recalcular y no lo hace:
 `PostService.GiveAward`. Por eso los premios no movian el score. Encuentralo
@@ -364,11 +364,11 @@ punto de decision; la complejidad es puntos de decision + 1).
 
 Vas a contar **18**. Segun los umbrales que vimos en clase:
 
-| Complejidad | Veredicto |
-|-------------|-----------|
-| 10 o menos | aceptable |
-| 11 a 15 | revisar |
-| mas de 15 | refactor obligatorio |
+| Complejidad | Veredicto            |
+| ----------- | -------------------- |
+| 10 o menos  | aceptable            |
+| 11 a 15     | revisar              |
+| mas de 15   | refactor obligatorio |
 
 Este metodo esta en la tercera fila. **Tu meta: dejarlo en 10 o menos** sin
 cambiar ni un solo resultado.
@@ -451,11 +451,11 @@ no un ADR.
 
 Que debe contener cada uno:
 
-| ADR | Debe responder |
-|-----|----------------|
+| ADR  | Debe responder                                                                                                                                         |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 0001 | Por que `TitleValidator` y `CommentBodyValidator` siguen separados si su codigo es casi identico. Que pasaria si los unifieramos y despues cambia uno. |
-| 0002 | Por que se elimino `IRepository<T>` y por que `IPostRepository` sobrevivio. Cual es el criterio que separa a una de la otra. |
-| 0003 | Donde vive ahora la formula del score y por que ahi. Que se sacrifico (por ejemplo: el listado ya no puede ordenar con una consulta simple). |
+| 0002 | Por que se elimino `IRepository<T>` y por que `IPostRepository` sobrevivio. Cual es el criterio que separa a una de la otra.                           |
+| 0003 | Donde vive ahora la formula del score y por que ahi. Que se sacrifico (por ejemplo: el listado ya no puede ordenar con una consulta simple).           |
 
 **La parte de Consecuencias es obligatoria y tiene que doler.** Si las tres
 tuyas dicen "el codigo queda mas limpio", no son consecuencias, son deseos.
@@ -498,15 +498,15 @@ Si algo mas cambio de comportamiento, no era parte del ejercicio: revisalo.
 
 ## 13. Rubrica (10 puntos)
 
-| Criterio | Pts |
-|----------|-----|
-| Compila sin warnings y los endpoints del punto 11 responden como se indica | 2 |
-| El calculo del score existe en UN solo lugar; los 5 puntos que lo tocaban quedaron unificados y `GiveAward` recalcula | 2 |
-| NO unifico `TitleValidator` con `CommentBodyValidator` y lo justifico por escrito con el criterio correcto (misma razon de cambio) | 2 |
-| Complejidad del calculador reducida a 10 o menos, sin cambiar resultados y sin inventar una jerarquia de clases | 1 |
-| Abstracciones especulativas eliminadas (11 archivos `.cs` o menos) conservando `IPostRepository` con argumento de costo | 1 |
-| Los 3 ADRs en formato MADR, con consecuencias negativas reales | 1 |
-| `RESPUESTAS.md` completo (inventario, numeros magicos, doble registro de DI, complejidad antes/despues) | 1 |
+| Criterio                                                                                                                           | Pts |
+| ---------------------------------------------------------------------------------------------------------------------------------- | --- |
+| Compila sin warnings y los endpoints del punto 11 responden como se indica                                                         | 2   |
+| El calculo del score existe en UN solo lugar; los 5 puntos que lo tocaban quedaron unificados y `GiveAward` recalcula              | 2   |
+| NO unifico `TitleValidator` con `CommentBodyValidator` y lo justifico por escrito con el criterio correcto (misma razon de cambio) | 2   |
+| Complejidad del calculador reducida a 10 o menos, sin cambiar resultados y sin inventar una jerarquia de clases                    | 1   |
+| Abstracciones especulativas eliminadas (11 archivos `.cs` o menos) conservando `IPostRepository` con argumento de costo            | 1   |
+| Los 3 ADRs en formato MADR, con consecuencias negativas reales                                                                     | 1   |
+| `RESPUESTAS.md` completo (inventario, numeros magicos, doble registro de DI, complejidad antes/despues)                            | 1   |
 
 **Descuento:** -1 punto por cada abstraccion nueva que agregues y no puedas
 justificar con un problema de hoy. Aqui se puede sacar menos de lo que se

@@ -7,8 +7,8 @@ Estas preguntas no se contestan escribiendo codigo, pero salen del mismo
 trabajo que acabas de hacer. Contesta despues de terminar la practica: varias
 te piden mirar tus propias decisiones.
 
-**Nombre:**
-**Fecha:**
+**Nombre:** Junior Andres Hernandez Villanueva
+**Fecha:** 17/08/26
 
 ---
 
@@ -50,17 +50,18 @@ razonable para el CRM Messenger. Puede haber varias.
 
 - [ ] Codigo en rama de feature, compilando
 - [ ] Tests unitarios pasando
-- [ ] Code review aprobado por al menos un companero
-- [ ] Build de CI en verde
-- [ ] Cobertura de tests del 100%
+- [-] Code review aprobado por al menos un companero
+- [-] Build de CI en verde
+- [-] Cobertura de tests del 100%
 - [ ] Merged a `develop`
 - [ ] El desarrollador dice que ya quedo
-- [ ] Criterios de aceptacion validados en el PR
+- [-] Criterios de aceptacion validados en el PR
 
 **6.** Por que "funciona en mi maquina" no puede ser parte de la DoD?
 Contesta en dos renglones.
 
-Tu respuesta:
+Tu respuesta: Ya que ante configuraciones especificas del proyecto de manera local
+Puede compilar en "MI EQUIPO", mas no quiere decir que sea codigo aun apto para hacer un PR o merge final
 
 **7.** Aplicado a esta practica: si el refactor que hiciste fuera una
 historia del sprint, escribe la DoD especifica que le pondrias. Minimo 4
@@ -68,10 +69,10 @@ puntos verificables (algo que otra persona pueda comprobar sin preguntarte).
 
 Tu respuesta:
 
-1.
-2.
-3.
-4.
+1. compila en su maquina
+2. CI en verde
+3. da los resultados esperados de acuerdo a los requisitos del proyecto en OTRO EQUIPO
+4. cumple con todos los test y pruebas
 
 ---
 
@@ -81,24 +82,24 @@ Tu respuesta:
 
 - a) En un sprint dedicado al final del release
 - b) En una fase posterior al desarrollo, a cargo de QA
-- c) Dentro de cada sprint, como parte de la Definicion de Done
+- c) **Dentro de cada sprint, como parte de la Definicion de Done**
 - d) Solo antes de cada despliegue a produccion
 
 **9.** El bug del score que encontraste en el Paso 0 llego a produccion.
 Ubica en que fase del ciclo de vida se pudo haber detectado mas barato, y
 que practica concreta lo habria atrapado ahi.
 
-| Fase | Se pudo detectar ahi? | Con que practica |
-|------|----------------------|------------------|
-| Requerimientos | | |
-| Diseno | | |
-| Desarrollo | | |
-| Testing | | |
-| Despliegue | | |
+| Fase           | Se pudo detectar ahi? | Con que practica |
+| -------------- | --------------------- | ---------------- |
+| Requerimientos |                       |                  |
+| Diseno         |                       |                  |
+| Desarrollo     |                       |                  |
+| Testing        |                       |                  |
+| Despliegue     |                       |                  |
 
 **10.** Scrum no elimina las fases del ciclo de vida. Que hace con ellas?
 
-Tu respuesta:
+Tu respuesta: Da dirección, y un fudamento valido, comprobable y sobre todo que garantiza que se cumpla, las incluye e indica en que momento del desarrollo es necesario llevar a cabo cada paso del clo de vida
 
 ---
 
@@ -107,14 +108,14 @@ Tu respuesta:
 **11.** Clasifica cada defecto que encontraste en la practica usando el
 cuadrante de Fowler. Marca una casilla por fila y justifica en una linea.
 
-| Defecto | Deliberada / Accidental | Prudente / Imprudente | Por que |
-|---------|------------------------|----------------------|---------|
-| La formula del score copiada en 5 lugares | | | |
-| `IRepository<T>` generico para una sola entidad | | | |
-| `PostRankingCalculator` con complejidad 18 | | | |
-| `IUnitOfWork` sin base de datos | | | |
-| La seccion `Ranking` de `appsettings.json` que nadie lee | | | |
-| `GiveAward` que no recalcula el score | | | |
+| Defecto                                                  | Deliberada / Accidental | Prudente / Imprudente | Por que |
+| -------------------------------------------------------- | ----------------------- | --------------------- | ------- |
+| La formula del score copiada en 5 lugares                |                         |                       |         |
+| `IRepository<T>` generico para una sola entidad          |                         |                       |         |
+| `PostRankingCalculator` con complejidad 18               |                         |                       |         |
+| `IUnitOfWork` sin base de datos                          |                         |                       |         |
+| La seccion `Ranking` de `appsettings.json` que nadie lee |                         |                       |         |
+| `GiveAward` que no recalcula el score                    |                         |                       |         |
 
 **12.** Cual de los seis anteriores cobro intereses mas caros, y como los
 cobro? (Pista: uno de ellos produjo un bug visible para el usuario.)
